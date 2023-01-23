@@ -16,6 +16,25 @@ class Main extends Component {
         // se for diferente de -1 quer dizer que estou editando algo
     };
 
+    // É executado depois que um componente é montado
+    componentDidMount() {
+        const tarefas = JSON.parse(localStorage.getItem('tarefas'));
+        if(!tarefas) return;
+        this.setState({
+            tarefas
+        });
+    }
+
+    // Permite executar o código React quando o componente é atualizado
+    componentDidUpdate(prevProps, prevState) {
+    // prevProps --> propriedades anteriores
+    // prevState --> estado anterior
+    const { tarefas } = this.state;
+
+    if(tarefas === prevState.tarefas) return;
+    localStorage.setItem('tarefas', JSON.stringify(tarefas));
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
         const { tarefas, index } = this.state;
@@ -38,6 +57,7 @@ class Main extends Component {
             this.setState({
                 tarefas: novasTarefas,
                 index: -1,
+                novaTarefa: '',
             });
         }
 
