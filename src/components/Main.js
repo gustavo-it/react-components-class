@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 
-// Form
-import { FaPlus } from 'react-icons/fa';
-
-// Tarefas
-import { FaEdit, FaWindowClose } from 'react-icons/fa';
+import Form from "./Form";
+import Tarefas from "./Tarefas";
 
 import './Main.css';
 
@@ -12,11 +9,9 @@ class Main extends Component {
     state = {
         novaTarefa: '',
         tarefas: [],
-        index: -1, // se for -1 quer dizer que estou criando coisas
-        // se for diferente de -1 quer dizer que estou editando algo
+        index: -1, 
     };
 
-    // É executado depois que um componente é montado
     componentDidMount() {
         const tarefas = JSON.parse(localStorage.getItem('tarefas'));
         if(!tarefas) return;
@@ -25,10 +20,9 @@ class Main extends Component {
         });
     }
 
-    // Permite executar o código React quando o componente é atualizado
+    
     componentDidUpdate(prevProps, prevState) {
-    // prevProps --> propriedades anteriores
-    // prevState --> estado anterior
+
     const { tarefas } = this.state;
 
     if(tarefas === prevState.tarefas) return;
@@ -39,7 +33,7 @@ class Main extends Component {
         event.preventDefault();
         const { tarefas, index } = this.state;
         let { novaTarefa } = this.state;
-        novaTarefa = novaTarefa.trim(); // Elimina os espaços do começo e final
+        novaTarefa = novaTarefa.trim(); 
 
         if(tarefas.indexOf(novaTarefa) !== -1) return;
         if(novaTarefa.trim() === '') return;
@@ -94,32 +88,18 @@ class Main extends Component {
             <div className="main">
                 <h1>Lista de tarefas</h1>
 
-                <form onSubmit={this.handleSubmit} className="form" action="#">
-                    <input onChange={this.handleChange} 
-                    type="text" 
-                    value={novaTarefa}
-                    />
-                    <button type="submit">
-                        <FaPlus />
-                    </button>
-                </form>
+                <Form 
+                handleSubmit={this.handleSubmit} 
+                handleChange={this.handleChange}
+                novaTarefa={novaTarefa}
+                />
 
-                <ul className="tarefas">
-                    {tarefas.map((tarefa, index) => (
-                        <li key={tarefa}>
-                            {tarefa}
-                            <span>
-                                <FaEdit 
-                                onClick={(event) => this.handleEdit(event, index)} 
-                                className="edit" />
+                <Tarefas 
+                tarefas={tarefas}
+                handleEdit={this.handleEdit}
+                handleDelete={this.handleDelete}
+                />
 
-                                <FaWindowClose 
-                                onClick={(event) => this.handleDelete(event, index)} 
-                                className="delete" />
-                            </span>
-                        </li>
-                    ))}
-                </ul>
             </div>
         );
     }
