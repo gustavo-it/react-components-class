@@ -11,12 +11,25 @@ import './Main.css';
 class Main extends Component {
     state = {
         novaTarefa: '',
-        tarefas: [
-            'Fazer café',
-            'Beber água',
-            'Estudar',
-        ]
+        tarefas: []
     };
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        const { tarefas } = this.state;
+        let { novaTarefa } = this.state;
+        novaTarefa = novaTarefa.trim(); // Elimina os espaços do começo e final
+
+        if(tarefas.indexOf(novaTarefa) !== -1) return;
+        if(novaTarefa.trim() === '') return;
+        
+        const novasTarefas = [...tarefas];
+        // Não podemos alterar o nosso state, para isso vamos salva-las
+        // em uma variável
+        this.setState({
+            tarefas: [...novasTarefas, novaTarefa],
+        });
+    }
 
     handleChange = (event) => {
         this.setState({
@@ -30,7 +43,7 @@ class Main extends Component {
             <div className="main">
                 <h1>Lista de tarefas</h1>
 
-                <form className="form" action="#">
+                <form onSubmit={this.handleSubmit} className="form" action="#">
                     <input onChange={this.handleChange} 
                     type="text" 
                     value={novaTarefa}
@@ -44,10 +57,10 @@ class Main extends Component {
                     {tarefas.map(tarefa => (
                         <li key={tarefa}>
                             {tarefa}
-                            <div>
+                            <span>
                                 <FaEdit className="edit" />
                                 <FaWindowClose className="delete" />
-                            </div>
+                            </span>
                         </li>
                     ))}
                 </ul>
