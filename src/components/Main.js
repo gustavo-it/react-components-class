@@ -11,12 +11,14 @@ import './Main.css';
 class Main extends Component {
     state = {
         novaTarefa: '',
-        tarefas: []
+        tarefas: [],
+        index: -1, // se for -1 quer dizer que estou criando coisas
+        // se for diferente de -1 quer dizer que estou editando algo
     };
 
     handleSubmit = (event) => {
         event.preventDefault();
-        const { tarefas } = this.state;
+        const { tarefas, index } = this.state;
         let { novaTarefa } = this.state;
         novaTarefa = novaTarefa.trim(); // Elimina os espaços do começo e final
 
@@ -24,11 +26,21 @@ class Main extends Component {
         if(novaTarefa.trim() === '') return;
         
         const novasTarefas = [...tarefas];
-        // Não podemos alterar o nosso state, para isso vamos salva-las
-        // em uma variável
-        this.setState({
-            tarefas: [...novasTarefas, novaTarefa],
-        });
+
+        if(index === -1) {
+            this.setState({
+                tarefas: [...novasTarefas, novaTarefa],
+                novaTarefa: '',
+            });
+        } else {
+            novasTarefas[index] = novaTarefa;
+
+            this.setState({
+                tarefas: novasTarefas,
+                index: -1,
+            });
+        }
+
     }
 
     handleChange = (event) => {
@@ -38,7 +50,12 @@ class Main extends Component {
     };
 
     handleEdit = (event, index) => {
+        const { tarefas } = this.state;
 
+        this.setState({
+            index: index,
+            novaTarefa: tarefas[index],
+        });
     } 
 
     handleDelete = (event, index) => {
