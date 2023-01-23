@@ -8,10 +8,11 @@ import React from "react";
 
 // Para utulizar o arquivo App.css precisamos importa-lo em nosso código
 // Importar em nossos componentes
+import Main from "./components/Main";
 import "./App.css"
 
 function App() {
-  return <h1>Hello world!</h1>
+  return <Main />;
 }
 
 export default App;
